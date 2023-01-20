@@ -1,14 +1,21 @@
 from fastapi_utils.inferring_router import InferringRouter
 from fastapi_utils.cbv import cbv
+from fastapi import Depends, HTTPException, status
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from auth import utils, oauth2
+from database import get_db
+import models
 
 router = InferringRouter(tags=["auth"])
 
 @cbv(router)
 class AuthRouter:
-    @router.post("/login")
-    def login(self):
-        return "Login"
-        user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
+    db: Session = Depends(get_db)
+
+    @router.post("/auth")
+    def login(self, user_credentials: OAuth2PasswordRequestForm = Depends()):
+        user = self.db.query(models.User).filter(models.User.email == user_credentials.username).first()
 
         if not user:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,detail='Invalid Credentials')

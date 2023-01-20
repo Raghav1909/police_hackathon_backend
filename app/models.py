@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Date
 from database import Base
 
 class User(Base):
@@ -6,7 +6,9 @@ class User(Base):
 
     username = Column(String, unique=True, index=True, primary_key=True)
     email = Column(String, unique=True)
-    hashed_password = Column(String)
+    password = Column(String) # hashed password
+    dob = Column(Date)
+    phone_no = Column(String)
     is_admin = Column(Boolean, default=False)
 
     def __repr__(self):
